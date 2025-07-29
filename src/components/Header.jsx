@@ -37,7 +37,6 @@ function Header() {
         {!user && (
           <nav className="hidden md:flex gap-4 sm:gap-8 text-sm font-medium flex-shrink-0">
             <Link to="/#about" className="hover:text-[#6133e6] transition">About</Link>
-            <Link to="/dev-dashboard" className="text-xs text-zinc-500 hover:text-[#6133e6] transition">Dev Dashboard</Link>
             <div
               className="relative"
               onMouseEnter={handleProductsEnter}
