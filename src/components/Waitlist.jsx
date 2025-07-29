@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Waitlist() {
-  const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdZRXI26yjuPVqJ7vVxLCZGqB78bsfAe-DkvIsVfwdo1oiMTg/viewform";
+  const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSc0QJnBNCX0kiRRUu0S9hBWsPViNSWDLOAEZG2G5zb5UaYJ2w/viewform?usp=header";
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center text-center px-4">
