@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import Header from './Header'
+import Footer from './Footer'
 
-const googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdZRXI26yjuPVqJ7vVxLCZGqB78bsfAe-DkvIsVfwdo1oiMTg/viewform";
-
-function DataIngestion() {
-  const [isDemoHovered, setIsDemoHovered] = useState(false);
+const DataIngestion = () => {
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
@@ -13,96 +11,230 @@ function DataIngestion() {
     document.title = "Data Ingestion | OneScale";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Bring all your data together with OneScale: upload files, connect tools, or transcribe audio. Centralize fragmented data sources for analysis and AI insights.');
+      metaDesc.setAttribute('content', 'Bring all your data together with OneScale. Upload files, connect tools, or transcribe audio to start building your organization\'s data foundation.');
     } else {
       const meta = document.createElement('meta');
       meta.name = "description";
-      meta.content = 'Bring all your data together with OneScale: upload files, connect tools, or transcribe audio. Centralize fragmented data sources for analysis and AI insights.';
+      meta.content = 'Bring all your data together with OneScale. Upload files, connect tools, or transcribe audio to start building your organization\'s data foundation.';
       document.head.appendChild(meta);
     }
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-black text-white">
       <Header />
-      {/* Hero Section - Deeper Dark Blue Gradient */}
-      <section className="relative flex flex-col items-center justify-center text-center px-4 py-20 md:py-28 bg-gradient-to-br from-[#0a1020] via-[#0a1020] to-[#1a223a] text-white">
-        <div className="relative z-10 flex flex-col items-center">
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-white drop-shadow-lg">Bring All Your Data Together</h1>
-          <p className="text-lg md:text-xl mb-8 text-zinc-300 max-w-xl mx-auto">Upload files, connect tools, or transcribe audio to start building your organization’s data foundation.</p>
+      
+      {/* Hero Section */}
+      <section className="relative flex flex-col items-center justify-center text-center px-4 py-20 md:py-32 bg-gradient-to-br from-[#0a1020] via-[#0a1020] to-[#1a223a] overflow-hidden min-h-[45vh]">
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-white drop-shadow-lg">
+            Bring All Your Data Together
+          </h1>
+          <p className="text-lg md:text-xl mb-6 text-zinc-300 max-w-3xl mx-auto">
+            Upload files, connect tools, or transcribe audio to start building your organization's data foundation.
+          </p>
         </div>
       </section>
+
       {/* Data Flow Section */}
-      <section className="w-full py-12 flex flex-col items-center justify-center bg-gradient-to-br from-black via-zinc-900 to-zinc-950">
-        <h2 className="text-2xl md:text-4xl font-bold text-center mb-8 text-zinc-100">Complete data collected across your entire organization</h2>
-        <img src="/dataflow.png" alt="Data flow diagram showing sources and destinations" className="w-full max-w-4xl h-auto object-contain" style={{minHeight: '320px'}} />
-        <div className="mt-4 text-zinc-400 text-center max-w-2xl">
-          OneScale makes it easy to centralize all your operational data, no matter the format or source.
-        </div>
-      </section>
-      {/* Ingestion Methods Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-zinc-100">
-        <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center text-[#6133e6]">Choose How You Start Ingesting Data</h2>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Card 1: Upload Files */}
-          <div className="bg-zinc-900 rounded-xl p-8 flex flex-col items-center shadow-lg border border-zinc-800 transition-transform hover:-translate-y-2 hover:shadow-2xl hover:border-[#7a3cff] group cursor-pointer">
-            <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-full bg-[#7a3cff]/10">
-              {/* Icon: Upload */}
-              <svg className="w-8 h-8 text-[#7a3cff]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 16V4m0 0l-4 4m4-4l4 4"/><rect x="4" y="16" width="16" height="4" rx="2"/></svg>
+      <section className="py-16 px-4 bg-zinc-950">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
+            Complete data collected across your entire organization
+          </h2>
+          <div className="relative max-w-6xl mx-auto">
+            {/* Segment-like Flow Visualization on dark surface */}
+            <div className="relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-b from-zinc-900/70 to-zinc-950/90 shadow-[0_0_60px_-20px_rgba(32,140,255,0.35)] px-4 py-8 md:px-8">
+              {/* Overlay SVG for curved flows */}
+              <svg
+                className="pointer-events-none absolute inset-0 h-full w-full"
+                viewBox="0 0 1200 600"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <defs>
+                  <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.25" />
+                    <stop offset="50%" stopColor="#7dd3fc" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#60A5FA" stopOpacity="0.25" />
+                  </linearGradient>
+                  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                {/* Left sources -> hub */}
+                <path d="M 180 120 C 420 140, 520 220, 600 300" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+                <path d="M 180 220 C 420 220, 520 250, 600 300" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+                <path d="M 180 320 C 420 300, 520 280, 600 300" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+                <path d="M 180 420 C 420 360, 520 320, 600 300" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+
+                {/* hub -> right destinations */}
+                <path d="M 600 300 C 680 220, 780 160, 1020 140" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+                <path d="M 600 300 C 700 260, 820 260, 1020 260" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+                <path d="M 600 300 C 700 340, 820 360, 1020 380" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+                <path d="M 600 300 C 700 380, 820 440, 1020 500" stroke="url(#flowGradient)" strokeWidth="6" fill="none" filter="url(#softGlow)" />
+              </svg>
+
+              {/* Content grid: sources | hub | destinations */}
+              <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                {/* Left - Sources */}
+                <div className="mx-auto flex w-full max-w-[220px] flex-col gap-4 md:mx-0">
+                  {[
+                    { icon: '📊', label: 'Spreadsheets' },
+                    { icon: '🌐', label: 'Web' },
+                    { icon: '🏢', label: 'Data Warehouses' },
+                    { icon: '🗄️', label: 'Databases' },
+                    { icon: '📱', label: 'Mobile' },
+                  ].map((n, i) => (
+                    <div
+                      key={i}
+                      className="group flex items-center justify-center rounded-xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950/70 px-4 py-3 text-center shadow-sm transition-all hover:shadow-lg hover:border-cyan-500/40"
+                    >
+                      <div className="mr-2 text-xl">{n.icon}</div>
+                      <p className="text-sm font-medium text-zinc-200">{n.label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Center - OneScale hub with pulse */}
+                <div className="relative mx-auto flex flex-col items-center justify-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 animate-ping rounded-full bg-cyan-400/20" style={{ filter: 'blur(8px)' }} />
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-tr from-cyan-400 via-sky-500 to-indigo-500 shadow-[0_0_30px_0_rgba(56,189,248,0.6)] ring-2 ring-cyan-300/30">
+                      <span className="text-4xl text-white">∞</span>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-sm font-semibold text-cyan-300">OneScale</p>
+                </div>
+
+                {/* Right - Destinations */}
+                <div className="mx-auto flex w-full max-w-[260px] flex-col gap-4 md:mx-0">
+                  {[
+                    { icon: '📈', label: 'Analytics' },
+                    { icon: '💬', label: 'Messaging' },
+                    { icon: '🤖', label: 'Machine Learning Models' },
+                    { icon: '🧠', label: 'AI Insights' },
+                    { icon: '⚡', label: 'Agentic AI' },
+                  ].map((n, i) => (
+                    <div
+                      key={i}
+                      className="group flex items-center justify-center rounded-xl border border-zinc-800 bg-gradient-to-b from-zinc-900 to-zinc-950/70 px-4 py-3 text-center shadow-sm transition-all hover:shadow-lg hover:border-cyan-500/40"
+                    >
+                      <div className="mr-2 text-xl">{n.icon}</div>
+                      <p className="text-sm font-medium text-zinc-200">{n.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* subtle bottom glow */}
+              <div className="pointer-events-none absolute -bottom-24 left-1/2 h-48 w-[70%] -translate-x-1/2 rounded-[100%] bg-cyan-500/10 blur-3xl" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Upload Files</h3>
-            <p className="text-zinc-400 text-center mb-4">CSV, Excel, PDFs, Receipts, Spreadsheets</p>
           </div>
-          {/* Card 2: Connect Tools */}
-          <div className="bg-zinc-900 rounded-xl p-8 flex flex-col items-center shadow-lg border border-zinc-800 transition-transform hover:-translate-y-2 hover:shadow-2xl hover:border-[#33e6c1] group cursor-pointer">
-            <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-full bg-[#33e6c1]/10">
-              {/* Icon: Connect */}
-              <svg className="w-8 h-8 text-[#33e6c1]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M2 12h4m12 0h4M6.34 6.34l2.83 2.83m5.66-5.66l2.83 2.83m0 8.48l-2.83 2.83m-8.48 0l2.83-2.83"/></svg>
+          <p className="text-lg text-zinc-400 mt-8 max-w-3xl mx-auto">
+            OneScale makes it easy to centralize all your operational data, no matter the format or source.
+          </p>
+        </div>
+      </section>
+
+      {/* Data Ingestion Options */}
+      <section className="py-16 px-4 bg-black">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-semibold mb-10 text-[#7a3cff]">
+            Choose How You Start Ingesting Data
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Upload Files */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 hover:border-[#7a3cff] transition-all duration-300">
+              <div className="text-5xl mb-4">📁</div>
+              <h3 className="text-xl font-semibold mb-4 text-white">Upload Files</h3>
+              <p className="text-zinc-400 mb-6">CSV, Excel, PDFs, Receipts, Spreadsheets</p>
+              <Link
+                to="/login"
+                className="inline-block bg-[#7a3cff] hover:bg-[#6a2ce6] text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              >
+                Start Uploading
+              </Link>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Connect Tools</h3>
-            <p className="text-zinc-400 text-center mb-4">Google Sheets, Google Drive, Databases, Socials</p>
-          </div>
-          {/* Card 3: Voice/Audio Input */}
-          <div className="relative bg-zinc-900 rounded-xl p-8 flex flex-col items-center shadow-lg border border-zinc-800 transition-transform hover:-translate-y-2 hover:shadow-2xl hover:border-[#7a3cff] group cursor-pointer">
-            <div className="w-16 h-16 mb-4 flex items-center justify-center rounded-full bg-[#7a3cff]/10">
-              {/* Icon: Voice */}
-              <svg className="w-8 h-8 text-[#7a3cff]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 18v2m-4-2a4 4 0 008 0V8a4 4 0 10-8 0v10z"/></svg>
+
+            {/* Connect Tools */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 hover:border-[#7a3cff] transition-all duration-300">
+              <div className="text-5xl mb-4">🔗</div>
+              <h3 className="text-xl font-semibold mb-4 text-white">Connect Tools</h3>
+              <p className="text-zinc-400 mb-6">Google Sheets, Google Drive, Databases, Socials</p>
+              <Link
+                to="/login"
+                className="inline-block bg-[#7a3cff] hover:bg-[#6a2ce6] text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              >
+                Connect Now
+              </Link>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Voice/Audio Input</h3>
-            <p className="text-zinc-400 text-center mb-4">Record audio or upload voice notes for instant transcription</p>
-            {/* Coming Soon Badge */}
-            <span className="absolute top-4 right-4 bg-gradient-to-r from-[#7a3cff] to-[#33e6c1] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">Coming Soon</span>
+
+            {/* Voice/Audio Input */}
+            <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 hover:border-[#7a3cff] transition-all duration-300 relative">
+              <div className="absolute top-4 right-4 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                Coming Soon
+              </div>
+              <div className="text-5xl mb-4">🎤</div>
+              <h3 className="text-xl font-semibold mb-4 text-white">Voice/Audio Input</h3>
+              <p className="text-zinc-400 mb-6">Record audio or upload voice notes for instant transcription</p>
+              <button
+                disabled
+                className="inline-block bg-zinc-700 text-zinc-400 font-semibold py-3 px-6 rounded-lg cursor-not-allowed"
+              >
+                Coming Soon
+              </button>
+            </div>
           </div>
         </div>
       </section>
-      {/* Feature Highlights Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-black via-zinc-900 to-zinc-950 text-zinc-100">
-        <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center text-[#6133e6]">What Makes Our Ingestion Unique</h2>
-        <div className="max-w-3xl mx-auto flex flex-col items-center">
-          {/* Bullets only, centered */}
-          <ul className="space-y-5 text-lg text-zinc-300 text-left w-full max-w-xl mx-auto">
-            <li className="flex items-start gap-3"><span className="text-green-500 mt-1">✔</span> Works with structured and unstructured data</li>
-            <li className="flex items-start gap-3"><span className="text-green-500 mt-1">✔</span> Optimized for offline-first and low-resource environments</li>
-            <li className="flex items-start gap-3"><span className="text-green-500 mt-1">✔</span> No-code setup for non-technical users</li>
-          </ul>
+
+      {/* What Makes Us Unique */}
+      <section className="py-16 px-4 bg-zinc-950">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-[#7a3cff]">
+            What Makes Our Ingestion Unique
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="text-4xl mb-4 text-white">✓</div>
+              <h3 className="text-xl font-semibold mb-4 text-white">Works with structured and unstructured data</h3>
+              <p className="text-zinc-400">Handle any data format, from spreadsheets to voice recordings</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl mb-4 text-white">✓</div>
+              <h3 className="text-xl font-semibold mb-4 text-white">Optimized for offline-first and low-resource environments</h3>
+              <p className="text-zinc-400">Built to sustain connectivity challenges</p>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl mb-4 text-white">✓</div>
+              <h3 className="text-xl font-semibold mb-4 text-white">No-code setup for non-technical users</h3>
+              <p className="text-zinc-400">Anyone can start collecting and organizing data</p>
+            </div>
+          </div>
         </div>
       </section>
-      {/* Trust & Support Section */}
-      <section className="py-14 px-4 bg-gradient-to-br from-zinc-950 via-black to-zinc-900">
-        <div className="max-w-2xl mx-auto rounded-xl border border-zinc-800 bg-zinc-900/70 flex flex-col md:flex-row items-center gap-6 p-8 shadow">
-          <div className="flex-shrink-0 flex items-center justify-center w-14 h-14 rounded-full bg-[#33e6c1]/20 border border-[#33e6c1]/30">
-            {/* Security icon */}
-            <svg className="w-8 h-8 text-[#33e6c1]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5.25-3.5 10-8 10S4 17.25 4 12V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-1 text-zinc-100">Your Data Stays Yours</h3>
-            <p className="text-zinc-400">All uploads are encrypted. We never sell your data.</p>
+
+      {/* Security Section */}
+      <section className="py-16 px-4 bg-black">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 flex items-center gap-6">
+            <div className="text-4xl flex-shrink-0">🛡️</div>
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold mb-2 text-white">Your Data Stays Yours</h3>
+              <p className="text-zinc-400 text-lg">All uploads are encrypted. We never sell your data.</p>
+            </div>
           </div>
         </div>
       </section>
+
       <Footer />
     </div>
   );
-}
+};
 
-export default DataIngestion; 
+export default DataIngestion 

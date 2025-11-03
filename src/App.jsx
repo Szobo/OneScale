@@ -3,7 +3,6 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Waitlist from './components/Waitlist';
 import DataIngestion from './components/DataIngestion';
-import DataWarehousing from './components/DataWarehousing';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AnalyticsPage from './components/AnalyticsPage';
@@ -11,6 +10,7 @@ import AIInsights from './components/AIInsights';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import UserJourney from './components/UserJourney';
 
 function LandingPageContent() {
   const [isDemoHovered, setIsDemoHovered] = useState(false);
@@ -45,8 +45,8 @@ function LandingPageContent() {
         <div className="absolute inset-0 bg-black/50 z-0"></div>
         {/* Overlay */}
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-white drop-shadow-lg">Data. AI. Intelligence. <span className="text-[#6133e6] font-semibold">All in One Place</span></h1>
-          <p className="text-lg md:text-xl mb-8 text-zinc-300 max-w-xl">Unify messy data, unlock local intelligence, and power your future—securely, effortlessly, and at scale. The first AI-native data platform for Kenya’s realities.</p>
+          <h1 className="text-3xl md:text-5xl font-extrabold mb-4 text-white drop-shadow-lg">From Data to Intelligence, <span className="text-[#6133e6] font-semibold"> Seamlessly</span></h1>
+          <p className="text-lg md:text-xl mb-8 text-zinc-300 max-w-xl">OneScale unifies analytics, machine learning, and AI deployment, turning your organization data into real-time intelligence.</p>
           <a href={googleFormUrl} target="_blank" rel="noopener noreferrer" className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300">Get Started</a>
           <p className="text-sm text-zinc-400 mt-4">Click "Get Started" to join our waitlist and be among the first to try OneScale</p>
         </div>
@@ -54,8 +54,8 @@ function LandingPageContent() {
       {/* About Us Section */}
       <section id="about" className="py-16 px-4 md:px-0 max-w-3xl mx-auto text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#6133e6]">About Us</h2>
-        <p className="text-zinc-300 text-lg">One Scale transforms everyday activity across Kenya into structured, usable data for AI.</p>
-        <p className="text-zinc-300 text-lg">We are a unified data, analytics and AI platform that enables teams to store, clean, analyze, and act on data from everywhere.</p>
+        <p className="text-zinc-300 text-lg">One Scale transforms everyday activity across your organization into structured, usable data for AI, and allows you to build and deploy Machine Learning models tailored to yor data.</p>
+        
       </section>
       {/* How It Works Section */}
       <section id="how" className="py-16 px-4 bg-zinc-950">
@@ -131,21 +131,28 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/waitlist" element={<Waitlist />} />
         <Route path="/products/data-ingestion" element={<DataIngestion />} />
-        <Route path="/products/data-warehousing" element={<DataWarehousing />} />
         <Route path="/products/dashboards-analytics" element={<AnalyticsPage />} />
         <Route path="/products/ai-insights" element={<AIInsights />} />
         <Route path="/login" element={<Login />} />
         <Route 
           path="/dashboard" 
+          element={<Dashboard />} 
+        />
+        <Route 
+          path="/data-ingestion" 
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <DataIngestion />
             </ProtectedRoute>
           } 
         />
         <Route 
           path="/dev-dashboard" 
           element={<Dashboard />} 
+        />
+        <Route 
+          path="/user-journey" 
+          element={<UserJourney />} 
         />
       </Routes>
     </AuthProvider>

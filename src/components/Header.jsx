@@ -12,7 +12,6 @@ function Header() {
   const { user } = useAuth();
   const isAIInsightsPage = location.pathname === '/products/ai-insights';
   const isDataIngestionPage = location.pathname === '/products/data-ingestion';
-  const isDataWarehousingPage = location.pathname === '/products/data-warehousing';
   const isAnalyticsPage = location.pathname === '/products/dashboards-analytics';
 
   const handleProductsEnter = () => {
@@ -61,10 +60,6 @@ function Header() {
                         <div className="font-semibold text-white">Data Ingestion</div>
                         <div className="text-sm text-zinc-400 mt-1">Upload files or connect socials, voice, or sheets</div>
                       </Link>
-                      <Link to="/products/data-warehousing" className={`block p-3 rounded-lg transition-colors ${isDataWarehousingPage ? 'bg-zinc-800 border-l-2 border-[#7a3cff]' : 'hover:bg-zinc-800'}`}>
-                        <div className="font-semibold text-white">Data Warehousing</div>
-                        <div className="text-sm text-zinc-400 mt-1">View all stored data and upload history</div>
-                      </Link>
                     </div>
                     <div className="space-y-3">
                       <Link to="/products/dashboards-analytics" className={`block p-3 rounded-lg transition-colors ${isAnalyticsPage ? 'bg-zinc-800 border-l-2 border-[#7a3cff]' : 'hover:bg-zinc-800'}`}>
@@ -82,6 +77,7 @@ function Header() {
             </div>
             <Link to="/#how" className="hover:text-[#6133e6] transition">How It Works</Link>
             <Link to="/#why" className="hover:text-[#6133e6] transition">Our Why</Link>
+            <Link to="/user-journey" className="hover:text-[#6133e6] transition">User Journey</Link>
           </nav>
         )}
       </div>

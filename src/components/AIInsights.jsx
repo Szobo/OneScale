@@ -53,6 +53,35 @@ function AIInsights() {
         </div>
       </section>
 
+      {/* Build or Deploy ML Models (from User Journey step 4) */}
+      <section className="py-20 px-4 bg-gradient-to-b from-zinc-950 via-black to-zinc-950 text-zinc-100">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          {/* Visual card */}
+          <div className="relative bg-zinc-900 border border-zinc-800 rounded-2xl p-8 shadow-2xl">
+            <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-pink-500/20 to-pink-600/10 flex items-center justify-center mb-6">
+              <span className="text-3xl">🧠</span>
+            </div>
+            <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+              <span className="text-lg">Deploy Model</span>
+            </button>
+            <div className="text-sm text-zinc-400 text-center mt-4">
+              Train custom models or use pre-trained ones
+            </div>
+          </div>
+
+          {/* Copy */}
+          <div>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-purple-600/20 flex items-center justify-center text-xl font-bold">4</div>
+              <h2 className="text-3xl md:text-4xl font-bold">Build or Deploy ML Models</h2>
+            </div>
+            <p className="text-lg md:text-xl text-zinc-300 leading-relaxed">
+              Users can either train custom machine learning models tailored to their unique datasets or deploy pre-trained models directly on the platform. OneScale handles model hosting, execution, and results integration automatically.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Use Cases Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 text-zinc-100">
         <div className="max-w-6xl mx-auto">

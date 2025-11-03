@@ -22,7 +22,8 @@ function Dashboard() {
     }
   };
 
-  if (loading) {
+  // Skip loading state for dev dashboard
+  if (loading && user) {
     return (
       <div className="min-h-screen flex flex-col bg-black text-white">
         <Header />
@@ -37,10 +38,13 @@ function Dashboard() {
     );
   }
 
-  if (!user) {
-    navigate('/login');
-    return null;
-  }
+  // Skip authentication check - just use mock data
+  const displayUser = user || {
+    email: 'demo@onescale.com',
+    user_metadata: {
+      full_name: 'Demo User'
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -74,7 +78,7 @@ function Dashboard() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-[#7a3cff] to-[#33e6c1] bg-clip-text text-transparent">
-                  Welcome back, {user.user_metadata?.full_name || user.email}
+                  Welcome back, {displayUser.user_metadata?.full_name || displayUser.email}
                 </h1>
                 <p className="text-zinc-400">Manage your data, analytics, and AI insights</p>
               </div>
@@ -99,9 +103,9 @@ function Dashboard() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Data Ingestion</h3>
               <p className="text-zinc-400 mb-4">Upload and process your data from multiple sources</p>
-              <button className="text-[#7a3cff] hover:text-[#33e6c1] transition-colors">
+              <Link to="/data-ingestion" className="text-[#7a3cff] hover:text-[#33e6c1] transition-colors">
                 Manage Data →
-              </button>
+              </Link>
             </div>
 
             {/* Analytics Card */}
