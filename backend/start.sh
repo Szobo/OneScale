@@ -14,9 +14,9 @@ fi
 echo "🔧 Activating virtual environment..."
 source venv/bin/activate
 
-# Install dependencies
-echo "📥 Installing dependencies..."
-pip install -r requirements.txt
+# Install dependencies (skip if already installed)
+echo "📥 Checking dependencies..."
+pip install -r requirements.txt --quiet 2>/dev/null || echo "⚠️  Skipping dependency installation (may already be installed)"
 
 # Create uploads directory
 echo "📁 Creating uploads directory..."
@@ -29,6 +29,14 @@ echo "📚 API Documentation: http://localhost:8000/docs"
 echo "🛑 Press Ctrl+C to stop the server"
 echo ""
 
-python main.py
+# Use venv's python directly (more reliable than relying on PATH)
+if [ -f "venv/bin/python" ]; then
+    venv/bin/python main.py
+elif command -v python3 &> /dev/null; then
+    python3 main.py
+else
+    echo "❌ Error: Python not found. Please install Python 3."
+    exit 1
+fi
 
 

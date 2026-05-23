@@ -1,133 +1,149 @@
-# Supabase Authentication Setup Guide
+# Supabase Setup for OneScale Data Ingestion
 
-This guide will help you set up Supabase authentication for your OneScale React application.
+## Database Schema
 
-## 🚀 Quick Start
+### 1. Create the `linked_files` table
 
-### 1. Create a Supabase Project
+```sql
+-- Create linked_files table for Excel files linked to cloud providers
+CREATE TABLE linked_files (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  file_id TEXT NOT NULL, -- Cloud provider file ID
+  provider TEXT NOT NULL CHECK (provider IN ('gdrive', 'onedrive')),
+  file_name TEXT NOT NULL,
+  file_url TEXT,
+  last_synced_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-1. Go to [https://app.supabase.com](https://app.supabase.com)
-2. Click "New Project"
-3. Choose your organization
-4. Enter project details:
-   - **Name**: `onescale-auth` (or your preferred name)
-   - **Database Password**: Create a strong password
-   - **Region**: Choose the closest region to your users
-5. Click "Create new project"
+-- Create index for faster queries
+CREATE INDEX idx_linked_files_user_id ON linked_files(user_id);
+CREATE INDEX idx_linked_files_provider ON linked_files(provider);
 
-### 2. Get Your Project Credentials
+-- Enable RLS (Row Level Security)
+ALTER TABLE linked_files ENABLE ROW LEVEL SECURITY;
 
-1. In your Supabase dashboard, go to **Settings** → **API**
-2. Copy the following values:
-   - **Project URL** (looks like: `https://your-project-id.supabase.co`)
-   - **Anon public key** (starts with `eyJ...`)
+-- Create RLS policies
+CREATE POLICY "Users can view their own linked files" ON linked_files
+  FOR SELECT USING (auth.uid() = user_id);
 
-### 3. Configure Environment Variables
+CREATE POLICY "Users can insert their own linked files" ON linked_files
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-1. Open the `.env` file in your project root
-2. Replace the placeholder values with your actual Supabase credentials:
+CREATE POLICY "Users can update their own linked files" ON linked_files
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own linked files" ON linked_files
+  FOR DELETE USING (auth.uid() = user_id);
+```
+
+### 2. Create the `file_uploads` table
+
+```sql
+-- Create file_uploads table for manually uploaded files
+CREATE TABLE file_uploads (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  file_name TEXT NOT NULL,
+  file_path TEXT NOT NULL, -- Path in Supabase Storage
+  file_size BIGINT NOT NULL,
+  file_type TEXT NOT NULL,
+  public_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create index for faster queries
+CREATE INDEX idx_file_uploads_user_id ON file_uploads(user_id);
+CREATE INDEX idx_file_uploads_file_type ON file_uploads(file_type);
+
+-- Enable RLS (Row Level Security)
+ALTER TABLE file_uploads ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies
+CREATE POLICY "Users can view their own file uploads" ON file_uploads
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own file uploads" ON file_uploads
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own file uploads" ON file_uploads
+  FOR DELETE USING (auth.uid() = user_id);
+```
+
+## Storage Buckets
+
+### 1. Create Storage Buckets
+
+```sql
+-- Create linked-excel bucket for Excel files from cloud providers
+INSERT INTO storage.buckets (id, name, public) VALUES ('linked-excel', 'linked-excel', true);
+
+-- Create manual-uploads bucket for manually uploaded files
+INSERT INTO storage.buckets (id, name, public) VALUES ('manual-uploads', 'manual-uploads', true);
+```
+
+### 2. Storage Policies
+
+```sql
+-- Policy for linked-excel bucket
+CREATE POLICY "Users can upload to linked-excel" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'linked-excel' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can view their linked-excel files" ON storage.objects
+  FOR SELECT USING (bucket_id = 'linked-excel' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can update their linked-excel files" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'linked-excel' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can delete their linked-excel files" ON storage.objects
+  FOR DELETE USING (bucket_id = 'linked-excel' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- Policy for manual-uploads bucket
+CREATE POLICY "Users can upload to manual-uploads" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'manual-uploads' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can view their manual-uploads files" ON storage.objects
+  FOR SELECT USING (bucket_id = 'manual-uploads' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can update their manual-uploads files" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'manual-uploads' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can delete their manual-uploads files" ON storage.objects
+  FOR DELETE USING (bucket_id = 'manual-uploads' AND auth.uid()::text = (storage.foldername(name))[1]);
+```
+
+## Environment Variables
+
+Add these to your `.env` file:
 
 ```env
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key-here
+# Google Drive API
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+# OneDrive API (Microsoft Graph)
+VITE_MICROSOFT_CLIENT_ID=your_microsoft_client_id
+VITE_MICROSOFT_CLIENT_SECRET=your_microsoft_client_secret
+
+# Supabase (already configured)
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### 4. Configure Google OAuth (Optional but Recommended)
+## API Setup
 
-1. In your Supabase dashboard, go to **Authentication** → **Providers**
-2. Find **Google** and click **Enable**
-3. You'll need to create a Google OAuth application:
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project or select existing one
-   - Enable the Google+ API
-   - Go to **Credentials** → **Create Credentials** → **OAuth 2.0 Client IDs**
-   - Set application type to **Web application**
-   - Add authorized redirect URIs:
-     - `https://your-project-id.supabase.co/auth/v1/callback`
-     - `http://localhost:5173/auth/callback` (for development)
-4. Copy the **Client ID** and **Client Secret** from Google
-5. Paste them into the Google provider settings in Supabase
+The API endpoints will be created in the `src/api/` directory and will handle:
+- OAuth authentication with Google Drive and OneDrive
+- File linking and syncing
+- Manual file uploads
+- Error handling and validation
 
-### 5. Test the Setup
+## Next Steps
 
-1. Start your development server:
-   ```bash
-   npm run dev
-   ```
-
-2. Navigate to `http://localhost:5173/login`
-
-3. Try signing in with Google (if configured) or check the console for any errors
-
-## 🔧 Project Structure
-
-```
-src/
-├── contexts/
-│   └── AuthContext.jsx          # Authentication state management
-├── components/
-│   ├── Login.jsx                # Login page
-│   ├── Dashboard.jsx            # Protected dashboard
-│   └── ProtectedRoute.jsx       # Route protection component
-├── lib/
-│   └── supabaseClient.js        # Supabase client configuration
-└── App.jsx                      # Updated with auth routes
-```
-
-## 🛡️ Security Features
-
-- **Protected Routes**: `/dashboard` is only accessible to authenticated users
-- **Automatic Redirects**: Unauthenticated users are redirected to `/login`
-- **Session Management**: Auth state is managed globally via React Context
-- **Loading States**: Proper loading indicators during auth checks
-
-## 🔄 Authentication Flow
-
-1. **Unauthenticated User**:
-   - Visits `/dashboard` → Redirected to `/login`
-   - Signs in with Google → Redirected to `/dashboard`
-
-2. **Authenticated User**:
-   - Can access `/dashboard` directly
-   - Header shows "Dashboard" button instead of "Sign In"
-   - Can sign out from dashboard
-
-## 🐛 Troubleshooting
-
-### Common Issues:
-
-1. **"Missing Supabase environment variables"**
-   - Check that your `.env` file exists and has the correct variable names
-   - Ensure the file is in the project root
-   - Restart your development server
-
-2. **"Invalid API key"**
-   - Verify your Supabase URL and anon key are correct
-   - Check that you copied the entire key (it should start with `eyJ`)
-
-3. **Google OAuth not working**
-   - Verify redirect URIs are correctly configured
-   - Check that Google OAuth is enabled in Supabase
-   - Ensure your Google Cloud project has the Google+ API enabled
-
-4. **CORS errors**
-   - Add your development URL to Supabase's allowed origins:
-     - Go to **Settings** → **API**
-     - Add `http://localhost:5173` to **Additional Allowed Origins**
-
-## 📝 Next Steps
-
-After setting up authentication, you can:
-
-1. **Add more auth providers** (GitHub, Discord, etc.)
-2. **Implement user profiles** and settings
-3. **Add role-based access control**
-4. **Create user-specific data storage**
-5. **Add email verification**
-
-## 🔗 Useful Links
-
-- [Supabase Documentation](https://supabase.com/docs)
-- [Supabase Auth Guide](https://supabase.com/docs/guides/auth)
-- [React Router Documentation](https://reactrouter.com/)
-- [Vite Environment Variables](https://vitejs.dev/guide/env-and-mode.html) 
+1. Run the SQL commands in your Supabase SQL editor
+2. Set up the storage buckets and policies
+3. Configure OAuth applications in Google Cloud Console and Microsoft Azure
+4. Add the environment variables
+5. Implement the API endpoints and UI components 
